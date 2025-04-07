@@ -23,8 +23,9 @@ import (
 )
 
 const (
-	defaultProviderMaxOpenConnections    = 20
-	defaultProviderMaxIdleConnections    = 0
+	defaultProviderMaxOpenConnections = 20 // sql.DB Default
+	defaultProviderMaxIdleConnections = 0
+	// Keep connection lifetimes short by default, to prevent blocking 'destroy' actions on database instance resources.
 	defaultProviderConnectionMaxIdleTime = time.Second * 5
 	defaultProviderConnectionMaxLifetime = time.Second * 10
 	defaultExpectedPostgreSQLVersion     = "9.0.0"
@@ -270,7 +271,7 @@ func validateExpectedVersion(v interface{}, key string) (warnings []string, erro
 	return
 }
 
-func validateParsableDuration(v interface{}, key string) (warnings []string, errors []error) {
+func validateParsableDuration(v any, _ string) (warnings []string, errors []error) {
 	if _, err := time.ParseDuration(v.(string)); err != nil {
 		errors = append(errors, fmt.Errorf("invalid duration (%q): %w", v.(string), err))
 	}
